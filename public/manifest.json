@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "PL8",
+  "name": "DVLA Personalised number plate searcher",
   "icons": [
     {
       "src": "favicon.ico",
