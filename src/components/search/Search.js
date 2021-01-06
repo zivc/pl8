@@ -6,8 +6,10 @@ import SearchResults from "./SearchResults";
 
 const Search = () => {
 
-   const [plate, plateInput] = useInput({type: 'text', className: style.input, value: 'ash'});
-   const [possiblePlates, setPossiblePlates] = useState(renderPossiblePlates('ash'));
+   const defaultValue = 'V10';
+
+   const [plate, plateInput] = useInput({type: 'text', className: style.input, value: defaultValue});
+   const [possiblePlates, setPossiblePlates] = useState(renderPossiblePlates(defaultValue));
 
    const doSearch = () => {
       setPossiblePlates(plate.length ? renderPossiblePlates(plate) : []);
