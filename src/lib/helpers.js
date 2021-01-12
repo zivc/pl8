@@ -1,9 +1,10 @@
 import {useState} from 'react';
-// import { validate as plateValidate } from 'uk-numberplate-format';
+import { validate as plateValidate } from 'uk-numberplate-format';
 import style from '../components/search/search.module.scss';
+import {getPrefix} from "../api/api";
 
 export const useInput = (props) => {
-   const [value, setValue] = useState('' ?? props.value);
+   const [value, setValue] = useState('');
    const input = <input value={value} onChange={e => setValue(e.target.value)} {...props} />;
    return [value, input];
 }
@@ -82,31 +83,29 @@ export const permutationsOfLetter = (str) => str.toLowerCase().split('').map(cha
       default:
          return [char];
    }
-})
+});
 
-const validatePlate = (plate) => {
+export const PREFIX_TEMPLATE = 'PREFIX';
+export const CURRENT_TEMPLATE = 'CURRENT';
+export const SUFFIX_TEMPLATE = 'SUFFIX';
+export const DATELESS_TEMPLATE = 'DATELESS';
+export const NORTHERN_IRELAND_TEMPLATE = 'NORTHERN_IRELAND';
 
-   let testPlate = plate.replace(/[A-Z]/gi, 'D')
-      .replace(/[0-9]/gi, '5')
-      .replace(/\s/gi, '');
-
-   const prefix = [
+export const REGISTRATION_PATTERN_MAP = {
+   [PREFIX_TEMPLATE]: [
       'D5 DDD',
       'D55 DDD',
       'D555 DDD'
-   ];
-
-   const current = [
+   ],
+   [CURRENT_TEMPLATE]: [
       'DD55 DDD'
-   ];
-
-   const suffix = [
+   ],
+   [SUFFIX_TEMPLATE]: [
       'DDD 5D',
       'DDD 55D',
       'DDD 555D'
-   ];
-
-   const dateless = [
+   ],
+   [DATELESS_TEMPLATE]: [
       '5 D',
       '5 DD',
       '5 DDD',
@@ -118,9 +117,8 @@ const validatePlate = (plate) => {
       '555 DDD',
       '5555 D',
       '5555 DD'
-   ];
-
-   const ni = [
+   ],
+   [NORTHERN_IRELAND_TEMPLATE]: [
       'DD 5',
       'DD 55',
       'DD 555',
@@ -129,23 +127,45 @@ const validatePlate = (plate) => {
       'DDD 55',
       'DDD 555',
       'DDD 5555'
-   ];
+   ]
+};
 
-   return !![
-      ...prefix,
-      ...current,
-      ...suffix,
-      ...dateless,
-      ...ni
-   ].find(test => test.replace(/\s/gi, '').includes(testPlate));
+export const plateToTemplate = (plate) => plate.replace(/[A-Z]/gi, 'D')
+   .replace(/[0-9]/gi, '5')
+   .replace(/\s/gi, '');
+
+const validatePlate = (plate) => {
+
+   let testPlate = plateToTemplate(plate);
+
+   const matches = Object.keys(REGISTRATION_PATTERN_MAP).filter(key => REGISTRATION_PATTERN_MAP[key].find(test => test.replace(/\s/gi, '').includes(testPlate)));
+
+   return {
+      plate,
+      matches
+   };
 
 }
 
-export const renderPossiblePlates = (plate) => {
-   if (!plate) return null;
+export const getAllPossiblePlates = (plate) => {
+   if (!plate) return [];
    return allPossibleCases(permutationsOfLetter(plate)).reduce((plates, currentPlate) => {
       const str = currentPlate.join('');
-      if (validatePlate(str)) plates.push(<div className={style.smallPlate} key={str}>{str}</div>);
+
+      const {matches} = validatePlate(str);
+      if (matches.length) plates.push({plate: str, matches})
+
       return plates;
    }, []);
+}
+
+export const renderPossiblePlates = (plates = []) => {
+   return plates.map(({plate, matches}) => {
+
+      if (matches.includes(PREFIX_TEMPLATE)) {
+         getPrefix(plate);
+      }
+
+      return <div className={style.smallPlate} key={plate} matches={matches}>{plate}</div>
+   })
 };
