@@ -6,7 +6,7 @@ const SearchResults = ({ possiblePlates = [] }) => {
 
    const text = !plateCount
       ? 'Type a phrase above to begin'
-      : `Searching for ${plateCount} possible permutation${plateCount && 's'}`;
+      : `Trying the following ${plateCount} permutation${plateCount && 's'}`;
 
    return <>
       <div className={style.smallPlates}>

@@ -1,4 +1,4 @@
-import {plateToTemplate, PREFIX_TEMPLATE, REGISTRATION_PATTERN_MAP} from "../src/lib/helpers.js";
+import {plateToTemplate, PREFIX_TEMPLATE, REGISTRATION_PATTERN_MAP} from "../src/lib/helpers.core.js";
 
 export const getPrefix = (plate = 'V10') => {
 
@@ -11,6 +11,7 @@ export const getPrefix = (plate = 'V10') => {
    console.log('testPlate', testPlate, containsNumber);
 
    const indexes = templates.reduce((matches, template) => {
+      //TODO DD55DDD and DD55DD for 2 search AB returns 4 indexes
       const index = template.indexOf(testPlate);
       if (index >= 0) {
          const matched = template.substr(index,plate.length);
@@ -60,11 +61,13 @@ export const getPrefix = (plate = 'V10') => {
          searches.push({P, N, L1, L2, L3});
          [L2, L3, L1] = plate.split('');
          searches.push({P, N, L1, L2, L3});
+         return searches;
       }
 
       if (plate.length === 3) {
          [L1, L2, L3] = plate.split('');
          searches.push({P, N, L1, L2, L3});
+         return searches;
       }
 
       return searches;
@@ -73,10 +76,10 @@ export const getPrefix = (plate = 'V10') => {
    return searches;
 }
 
-console.log(getPrefix('A'));
-console.log(getPrefix('1'));
-console.log(getPrefix('V1'));
-console.log(getPrefix('V10'));
-console.log(getPrefix('1A'));
-console.log(getPrefix('AB'));
-console.log(getPrefix('ABC'));
+// console.log(getPrefix('A'));
+// console.log(getPrefix('1'));
+// console.log(getPrefix('V1'));
+// console.log(getPrefix('V10'));
+// console.log(getPrefix('1A'));
+// console.log(getPrefix('AB'));
+// console.log(getPrefix('ABC'));
