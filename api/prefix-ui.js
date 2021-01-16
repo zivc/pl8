@@ -6,7 +6,8 @@ export const getPrefix = (plate = 'V10') => {
    const templates = REGISTRATION_PATTERN_MAP[PREFIX_TEMPLATE].map(template => template.replace(/\s/gi, ''));
 
    const testPlate = plateToTemplate(plate);
-   const containsNumber = !!plate.match(/[0-9]{1,3}/gi);
+   const getNumber = plate.match(/[0-9]{1,3}/gi);
+   const containsNumber = !!getNumber;
 
    console.log('testPlate', testPlate, containsNumber);
 
@@ -14,9 +15,9 @@ export const getPrefix = (plate = 'V10') => {
       //TODO DD55DDD and DD55DD for 2 search AB returns 4 indexes
       const index = template.indexOf(testPlate);
       if (index >= 0) {
-         const matched = template.substr(index,plate.length);
+         const matched = template.substr(index, plate.length);
          const existsAlready = matches.find(match => match.matched === matched && match.index === index);
-         if (!existsAlready && matched) matches.push({ index, template, matched });
+         if (!existsAlready && matched) matches.push({index, template, matched});
       }
       return matches;
    }, []);
@@ -25,22 +26,22 @@ export const getPrefix = (plate = 'V10') => {
    console.log('indexes', indexes);
 
    const searches = indexes.reduce((searches, {template, index, matched}) => {
-      let P,N,L1,L2,L3;
+      let P, N, L1, L2, L3;
 
       const isNumber = !isNaN(plate);
 
       // is number only
       if (containsNumber && isNumber) {
-         searches.push({ P, N: plate, L1, L2, L3 });
+         searches.push({P, N: plate, L1, L2, L3});
          return searches;
       }
 
       // is first letter only
       if (plate.length === 1) {
-         searches.push({ P: plate, N, L1, L2, L3 });
-         searches.push({ P, N, L1: plate, L2, L3 });
-         searches.push({ P, N, L1, L2: plate, L3 });
-         searches.push({ P, N, L1, L2, L3: plate });
+         searches.push({P: plate, N, L1, L2, L3});
+         searches.push({P, N, L1: plate, L2, L3});
+         searches.push({P, N, L1, L2: plate, L3});
+         searches.push({P, N, L1, L2, L3: plate});
          return searches;
       }
 
@@ -51,7 +52,7 @@ export const getPrefix = (plate = 'V10') => {
          let [P, second] = plate.split(N);
          if (P === '') P = undefined;
          [L1, L2, L3] = second.split('');
-         searches.push({P,N,L1,L2,L3});
+         searches.push({P, N, L1, L2, L3});
          return searches;
       }
 

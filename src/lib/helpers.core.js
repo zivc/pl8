@@ -2,11 +2,25 @@ export const plateToTemplate = (plate) => plate.replace(/[A-Z]/gi, 'D')
    .replace(/[0-9]/gi, '5')
    .replace(/\s/gi, '');
 
+export const SEARCH_MINIMUM_LENGTH = 3; // GT EQ
+export const MEETS_MINIMUM_LENGTH = (str = '') => {
+   console.log(str);
+   return !(str.length >= SEARCH_MINIMUM_LENGTH);
+}
+
 export const PREFIX_TEMPLATE = 'PREFIX';
 export const CURRENT_TEMPLATE = 'CURRENT';
 export const SUFFIX_TEMPLATE = 'SUFFIX';
 export const DATELESS_TEMPLATE = 'DATELESS';
 export const NORTHERN_IRELAND_TEMPLATE = 'NORTHERN_IRELAND';
+
+export const REGISTRATION_TEMPLATE_KEYS = [
+   PREFIX_TEMPLATE,
+   CURRENT_TEMPLATE,
+   SUFFIX_TEMPLATE,
+   DATELESS_TEMPLATE,
+   NORTHERN_IRELAND_TEMPLATE
+];
 
 export const REGISTRATION_PATTERN_MAP = {
    [PREFIX_TEMPLATE]: [
@@ -65,7 +79,7 @@ export const permutationsOfLetter = (str) => str.toLowerCase().split('').map(cha
       case '9':
          return ['g', '6', '9'];
       case 'h':
-         return ['h', '11','1t'];
+         return ['h', '11', '1t'];
       case 'i':
       case '1':
          return ['i', '1'];

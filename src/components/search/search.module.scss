@@ -50,6 +50,12 @@ $font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 
   text-shadow: -1px -1px rgba(255,255,255,.5);
   background-image: linear-gradient(to bottom right,rgba(255,255,255,.03125) 0,rgba(255,255,255,.03125) 50%,rgba(0,0,0,.03125) 51%,rgba(0,0,0,0) 100%);
   box-shadow: inset 1px 1px 1px 1px rgba(255,255,255,.25), inset 0 1px rgba(255,255,255,.5), inset 0 -16px 64px -25.6px rgba(0,0,0,.25), inset 0 32px 32px -25.6px rgba(255,255,255,.5), 0 0 0 1px rgba(0,0,0,.1), 0 3.2px 12.29px rgba(0,0,0,.5);
+
+  &[disabled] path {
+    opacity:0.5;
+    pointer-events: none;
+  }
+
 }
 
 .smallPlates {

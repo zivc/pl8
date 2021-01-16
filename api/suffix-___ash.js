@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import qs from "qs";
 import {API_OPTS, API_PATH} from "../src/api/api.conf.js";
 
-export const prefix__ash = async (search) => {
+export const suffix___ash = async (search) => {
 
    let resp = {
       SearchResults: []
@@ -10,25 +10,18 @@ export const prefix__ash = async (search) => {
 
    if (!search) return Promise.resolve({ a:0, search, results: resp.SearchResults });
 
-   const {P, N, L1, L2, L3} = search;
+   const { prefix1, prefix2, prefix3, numbers, letter1 } = search;
 
    return new Promise(async (resolve, reject) => {
 
-      let prefix1 = (P || 'ANY').toUpperCase()
-      let numbers = N || 'ANY';
-      let letter1 = (L1 || 'ANY').toUpperCase();
-      let letter2 = (L2 || 'ANY').toUpperCase();
-      let letter3 = (L3 || 'ANY').toUpperCase();
-
-      console.log({prefix1, numbers, letter1, letter2, letter3});
-
       const body = {
-         style: 'p',
+         style: 's',
          prefix1,
+         prefix2,
+         prefix3,
          numbers,
          letter1,
-         letter2,
-         letter3,
+         numberIsExact:1,
          orderBy: 'plate',
          maximumPrice: 'undefined',
          pageSize: 200,
